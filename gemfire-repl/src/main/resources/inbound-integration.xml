@@ -13,10 +13,15 @@
 	<context:property-placeholder />
 
 	<int-jdbc:inbound-channel-adapter
-		query="select * from ${schema}.${table}_Queue" channel="target"
+		query="select * from ${schema}.${table}_Queue" channel="enricher"
 		data-source="dataSource" update="delete from ${schema}.${table}_Queue where id in (:id)">
 		<int:poller fixed-rate="1000">
 			<int:transactional />
 		</int:poller>
 	</int-jdbc:inbound-channel-adapter>
+
+	<int:header-enricher input-channel="enricher"
+		output-channel="target">
+		<int:header name="region" value="${table}"/>
+	</int:header-enricher>
 </beans>

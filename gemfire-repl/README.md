@@ -6,9 +6,13 @@ This project provides a Spring Integration flow that is dynamically configured t
 Currently this project is somewhat dependent on SQL Server, as the scripts for creating triggers and queue tables use TSQL.
 
 ## Build ##
-To assemble the replicator, call "mvn package" to create the "target/gemfirerepl-*-dist.zip" file which contains code, scripts, and a configuration file you can use to control the replication process.
+To assemble the replicator, call `mvn package` to create the `target/gemfirerepl-*-dist.zip` file which contains code, scripts, and a configuration file you can use to control the replication process.
 
 ## Run ##
-To use the replicator, extract the gemfirerepl-*-dist.zip file to the source server you want to replicate from, and modify the application.properties file to the proper settings for your database and GemFire server.  Launch using the gemfirerepl.bat, or gemfirerepl.sh scripts.
+To use the replicator, extract the `gemfirerepl-*-dist.zip` file to the source server you want to replicate from, and modify the application.properties file to the proper settings for your database and GemFire server.
 
-If you need to specify additional libraries for the java.library.path (SQL Server Integrated Authentication, for example), set the JAVA_LIBRARY_PATH environment variable before running gemfirerepl.bat or gemfirerepl.sh.
+You need to configure GemFire servers with regions that match the names of the tables you are replicating.  These regions can be configured however you want, and as long as the names match the source table names exactly (case-sensitive), then the gemfirerepl will automatically send updates to those regions.
+
+Launch using the `gemfirerepl.bat`, or `gemfirerepl.sh` scripts.
+
+If you need to specify additional libraries for the java.library.path (SQL Server Integrated Authentication, for example), set the `JAVA_LIBRARY_PATH` environment variable before running `gemfirerepl.bat` or `gemfirerepl.sh`.

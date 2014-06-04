@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
-	xmlns:int-jdbc="http://www.springframework.org/schema/integration/jdbc"
+	xmlns:gfe-data="http://www.springframework.org/schema/data/gemfire"
 	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/integration/jdbc http://www.springframework.org/schema/integration/jdbc/spring-integration-jdbc.xsd">
+        http://www.springframework.org/schema/integration/gemfire http://www.springframework.org/schema/integration/gemfire/spring-integration-gemfire.xsd
+        http://www.springframework.org/schema/data/gemfire http://www.springframework.org/schema/data/gemfire/spring-data-gemfire.xsd">
 
 	<int:channel id="target" />
-	
-	<int:logging-channel-adapter channel="target"
-		level="INFO" />
 
+	<gfe-data:datasource>
+	   <gfe-data:locator host="${cacheWriter.locator}" port="${cacheWriter.port}"/>
+	</gfe-data:datasource>
+
+	<int:service-activator input-channel="target" ref="cacheWriter"/>
+	
+	<bean id="cacheWriter" class="gopivotal.poc.gemfirerepl.CacheWriter" autowire="byType" />
+	
 </beans>
