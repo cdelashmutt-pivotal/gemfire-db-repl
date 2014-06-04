@@ -6,6 +6,8 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -22,6 +24,8 @@ import org.springframework.util.StringUtils;
 @Component
 public class Initializer implements InitializingBean
 {
+	Logger log = LoggerFactory.getLogger(Initializer.class);
+	
 	@Value("${dbinitializer.schema}")
 	private String schema;
 	
@@ -50,6 +54,8 @@ public class Initializer implements InitializingBean
 			//Set up the Triggers and Queue tables
 			String tableScript = StringUtils.replace(schemaScript, "${table}", table );
 			template.execute(tableScript);
+			
+			log.info("Creating poller channel for [{}].[{}]", schema, table);
 			
 			//Create child context for listener
 			ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext(
